@@ -14,6 +14,7 @@ const app = express();
 //USERS
 app.post("/createAccount", ControllerAccounts.createAccount);
 app.post("/login", ControllerAccounts.login)
+app.put("/changepassword",ControllerAccounts.changePassword);
 //SONGS
 app.post("/createSong", ControllerSongs.createMusic)
 //STUDENTS
