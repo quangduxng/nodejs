@@ -8,7 +8,7 @@ app.use(express.json());
 
 
 // khai báo cổng chạy dịch vụ
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 5000;
 
 const db = process.env.MONGO
 mongoose
@@ -35,6 +35,6 @@ app.use(express.json())
 
 app.use(Router);
 
-app.listen(5000, () => {
+app.listen(PORT||5000, () => {
   console.log("Server is running at port 5000");
 });
