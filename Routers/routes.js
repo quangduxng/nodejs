@@ -35,7 +35,7 @@ router.post("/createRole", ControllerRole.createRole)
 //USERZIng
 router.post("/signup", ControllerUser.Signup)
 router.post("/login", ControllerUser.login)
-router.get("/get-all-user",authenToken, ControllerUser.getAllUser)
+router.get("/get-all-user", ControllerUser.getAllUser)
 router.delete("/deleteUserById/:id",authenToken,ControllerUser.deleteUser)
 //PLAYLIST
 router.post("/createPlaylist",ControllerPlaylist.createPlaylist)
