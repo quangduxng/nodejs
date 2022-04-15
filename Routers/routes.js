@@ -1,36 +1,59 @@
 const express = require("express");
+const router = express.Router()
 const Student = require("../Models/models");
-const Class = require("../Models/class")
 const ClassOfIt = require("../Models/class");
 const ControllerStudents = require('../Controllers/students')
 const ControllerAccounts = require('../Controllers/account')
-const ControllerSongs = require('../Controllers/music')
 const ControllerClass = require('../Controllers/class')
+const ControllerRole = require('../Controllers/role')
+const ControllerUser = require('../Controllers/user')
+const ControllerPlaylist = require('../Controllers/playlist')
+const ControllerGenre = require('../Controllers/genre')
+const ControllerArtist = require('../Controllers/artist');
+const ControllerAlbum= require('../Controllers/album')
+const { required } = require("nodemon/lib/config")
+const authenToken= require("../middleware/auth")
+const Auth = require("../utils/authorization")
 
-const app = express();
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: process.env.AWS_BUCKET,
+//     key: async function (req, file, cb) {
+//       // console.log(file);
+//       let date = await Date.now();
+//       cb(null, date + file.originalname); //use Date.now() for unique file keys
+//     },
+//   }),
+// });
 
 
+router.put("/changepassword",ControllerAccounts.changePassword);
+//ROLE
+router.post("/createRole", ControllerRole.createRole)
 
-//USERS
-app.post("/createAccount", ControllerAccounts.createAccount);
-app.post("/login", ControllerAccounts.login)
-app.put("/changepassword",ControllerAccounts.changePassword);
-//SONGS
-app.post("/createSong", ControllerSongs.createMusic)
+//USERZIng
+router.post("/signup", ControllerUser.Signup)
+router.post("/login", ControllerUser.login)
+router.get("/get-all-user",authenToken, ControllerUser.getAllUser)
+router.delete("/deleteUserById/:id",authenToken,ControllerUser.deleteUser)
+//PLAYLIST
+router.post("/createPlaylist",ControllerPlaylist.createPlaylist)
+
+//GENRE
+router.post("/createGenre",ControllerGenre.createGenre)
+
+//Artist
+router.post("/createArtist",ControllerArtist.createArtist)
+//Album
+router.post("/createAlbum",ControllerAlbum.createAlbum)
 //STUDENTS
-app.post("/add-student", ControllerStudents.createStudent);
-app.put("/update-student/:id", ControllerStudents.updateStudent);
-app.get("/all-student", async (request, response) => {
-  const users = await Student.find({});
-  try {
-    response.send(users);
-  } catch (error) {
-    response.status(500).send(error);
-  }
-});
+router.post("/add-student", ControllerStudents.createStudent);
+router.put("/update-student/:id", ControllerStudents.updateStudent);
+
 //CLASS
-app.post("/add-class", ControllerClass.createClass);
-app.get("/all-class", async (request, response) => {
+router.post("/add-class", ControllerClass.createClass);
+router.get("/all-class", async (request, response) => {
 
   const Aclass = await ClassOfIt.find({})
     .populate({
@@ -47,7 +70,7 @@ app.get("/all-class", async (request, response) => {
 
 
 
-app.get('/student-by-name/', async (request, response) => {
+router.get('/student-by-name/', async (request, response) => {
   const name_student = request.body.name;
   console.log(name_student);
   const users = await Student.find({ name: name_student });
@@ -57,7 +80,7 @@ app.get('/student-by-name/', async (request, response) => {
     response.status(500).send(error);
   }
 });
-app.delete('/delete-student/:id', async (request, response) => {
+router.delete('/delete-student/:id', async (request, response) => {
   // const id = request.body.id
   const users = await Student.findByIdAndDelete(request.params.id);
   try {
@@ -69,4 +92,4 @@ app.delete('/delete-student/:id', async (request, response) => {
 
 
 
-module.exports = app;
+module.exports = router;
