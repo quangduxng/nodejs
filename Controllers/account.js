@@ -1,4 +1,6 @@
 const Services = require('../Service/account')
+const jwt = require('jsonwebtoken');
+require("dotenv").config();
 async function createAccount(req, res) {
     try {
         console.log(req.body);
@@ -26,7 +28,7 @@ async function login(req, res) {
         if (!account) {
             return res.status(400).json({ status: 400, message: "Login Fails!" })
         }
-        return res.status(200).json({ status: 200, data: account, message: "Succesfully Login" })
+        return res.status(200).json({ status: 200, data: jwt.sign({ _id: account._id }, process.env.JWT_KEY), message: "Succesfully Login" })
     } catch (error) {
         console.log(error)
     }
